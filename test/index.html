@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <form onsubmit="savetolocalstorage(event)">
+        <label for="homepage">Image Url:</label>
+        <input type="url" id="homepage" name="homepage"><br>
+        <label>Title</label><br>
+        <input type="text" name="blogtitle" id="blogtitletag"required><br>
+        <label>Blog Description</label><br>
+        <input type="tel" name="blogdescription" id="blogdescriptiontag"><br>
+        <button>Post Blog</button><br>
+    </form>
+    <ul id="listofitems"></ul>
+    <script>
+        function savetolocalstorage(event){
+           event.preventDefault();
+            const imageurl=event.target.homepage.value;
+            const blogtitle=event.target.blogtitle.value;
+            const blogdescription=event.target.blogdescription.value;
+            const obj = {
+                imageurl,
+                blogtitle,
+                blogdescription
+            }
+            localStorage.setItem(obj.blogtitle,JSON.stringify(obj));
+            ShowUserOnScreen(obj);
+        }
+        function ShowUserOnScreen(obj){
+            const parentEle=document.getElementById('listofitems');
+            const childEle=document.createElement('div');
+            const image = document.createElement('img');
+            
+            
+            const para = document.createElement("h1");
+            const node = document.createTextNode(obj.blogtitle);
+            para.appendChild(node);
+            childEle.appendChild(image);
+            childEle.appendChild(para);
+            
+            const para2 = document.createElement("p");
+            const node2 = document.createTextNode(obj.blogdescription);
+            para.appendChild(node);
+            childEle.appendChild(para);
+            const deletebtn=document.createElement('input');
+            deletebtn.type='button';
+            deletebtn.value='Delete';
+            deletebtn.onclick= () =>{
+              localStorage.removeItem(obj.blogtitle);
+              parentEle.removeChild(childEle);
+            }
+            const editbtn=document.createElement('input');
+            editbtn.type='button';
+            editbtn.value='Edit';
+            editbtn.onclick= () =>{
+                localStorage.removeItem(obj.blogtitle);
+                parentEle.removeChild(childEle);
+                document.getElementById('homepage').value=obj.imageurl;
+                document.getElementById('blogtitletag').value=obj.blogtitle;
+                document.getElementById('blogdescriptiontag').value=obj.blogdescription;
+            }
+            childEle.appendChild(deletebtn);
+            childEle.appendChild(editbtn);
+            parentEle.appendChild(childEle); 
+        }
+    </script>
+</body>
+</html>
